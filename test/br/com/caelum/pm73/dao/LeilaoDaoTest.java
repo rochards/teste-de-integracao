@@ -54,4 +54,25 @@ public class LeilaoDaoTest {
 		
 		assertEquals(1L, total);
 	}
+	
+	@Test
+	public void deveContarLeiloesEncerradosIgualAZero() {
+		
+		String uNome = "maurício";
+		String uEmail = "mauricio@email.com.br";
+		Usuario usuario = new Usuario(uNome, uEmail);
+		
+		Leilao encerrado1 = new Leilao("Geladeria", 700.0, usuario, false);
+		encerrado1.encerra();
+		Leilao encerrado2 = new Leilao("PS5", 3500.0, usuario, false);
+		encerrado2.encerra();
+		
+		usuarioDao.salvar(usuario);
+		leilaoDao.salvar(encerrado1);
+		leilaoDao.salvar(encerrado2);
+		
+		long total = leilaoDao.total();
+		
+		assertEquals(0, total);
+	}
 }
