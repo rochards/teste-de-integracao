@@ -146,4 +146,56 @@ public class LeilaoDaoTest {
 
         assertEquals(1, antigos.size());
     }
+	
+	@Test
+	public void deveTrazerLeiloesNaoEncerradosNoPeriodo() {
+		
+		Calendar comecoDoIntervalo = Calendar.getInstance();
+		comecoDoIntervalo.add(Calendar.DAY_OF_MONTH, -10);
+		Calendar fimDoIntervalo = Calendar.getInstance();
+		
+		Usuario usuario = new Usuario("Gio", "gio@email.com.br");
+		
+		Leilao l1 = new Leilao("PS5", 3940.0, usuario, false);
+		Calendar datal1 = Calendar.getInstance();
+		datal1.add(Calendar.DAY_OF_MONTH, -2);
+		l1.setDataAbertura(datal1);
+		
+		Leilao l2 = new Leilao("TV", 2500.0, usuario, false);
+		Calendar datal2 = Calendar.getInstance();
+		datal2.add(Calendar.DAY_OF_MONTH, -20);
+		l2.setDataAbertura(datal2);
+		
+		usuarioDao.salvar(usuario);
+		leilaoDao.salvar(l1);
+		leilaoDao.salvar(l2);
+		
+		List<Leilao> leiloes = leilaoDao.porPeriodo(comecoDoIntervalo, fimDoIntervalo);
+		
+		assertEquals(1, leiloes.size());
+		assertEquals("PS5", leiloes.get(0).getNome());
+	}
+	
+	@Test
+	public void naoDeveTrazerLeiloesEncerradosNoPeriodo() {
+		
+		Calendar comecoDoIntervalo = Calendar.getInstance();
+		comecoDoIntervalo.add(Calendar.DAY_OF_MONTH, -10);
+		Calendar fimDoIntervalo = Calendar.getInstance();
+		
+		Usuario usuario = new Usuario("Gio", "gio@email.com.br");
+		
+		Leilao l1 = new Leilao("PS5", 3940.0, usuario, false);
+		Calendar datal1 = Calendar.getInstance();
+		datal1.add(Calendar.DAY_OF_MONTH, -2);
+		l1.setDataAbertura(datal1);
+		l1.encerra();
+		
+		usuarioDao.salvar(usuario);
+		leilaoDao.salvar(l1);
+		
+		List<Leilao> leiloes = leilaoDao.porPeriodo(comecoDoIntervalo, fimDoIntervalo);
+		
+		assertEquals(0, leiloes.size());
+	}
 }
