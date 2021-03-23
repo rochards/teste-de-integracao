@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -59,5 +60,23 @@ public class UsuarioDaoTest {
 		Usuario usuario = usuarioDao.porNomeEEmail(uNome, uEmail);
 		
 		assertNull(usuario);
+	}
+	
+	@Test
+	public void deveDeletarUmUsuario() {
+		
+		Usuario usuario = new Usuario("Joseph", "jose@mail.com.br");
+		
+		usuarioDao.salvar(usuario);
+		usuarioDao.deletar(usuario);
+		
+		// fazer esses comando só devem ser usados pq estamos utilizando o Hibernate, ele coloca
+		// muita coisa em cache, por isso chamamos os métodos abaixo.
+		session.flush(); // garante que o comando vai para o banco
+		session.clear(); // apaga o cache
+		
+		Usuario deletado = usuarioDao.porNomeEEmail("Joseph", "jose@mail.com.br");
+		
+		Assert.assertNull(deletado);
 	}
 }
