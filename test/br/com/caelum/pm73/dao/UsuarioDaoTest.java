@@ -74,6 +74,8 @@ public class UsuarioDaoTest {
 		// muita coisa em cache, por isso chamamos os métodos abaixo.
 		session.flush(); // garante que o comando vai para o banco
 		session.clear(); // apaga o cache
+		/* Geralmente em testes que fazemos SELECTs logo após uma deleção ou alteração em batch, 
+		 * o uso do flush é obrigatório.*/
 		
 		Usuario deletado = usuarioDao.porNomeEEmail("Joseph", "jose@mail.com.br");
 		
