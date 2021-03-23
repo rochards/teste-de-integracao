@@ -2,6 +2,8 @@ package br.com.caelum.pm73.dao;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Calendar;
+import java.util.Calendar.Builder;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -96,5 +98,30 @@ public class LeilaoDaoTest {
 		
 		assertEquals(1, listaDeNovos.size());
 		assertEquals("Geladeira", listaDeNovos.get(0).getNome());
+	}
+	
+	@Test
+	public void deveContarLeiloesAntigos() {
+		
+		String uNome = "maurício";
+		String uEmail = "mauricio@email.com.br";
+		Usuario usuario = new Usuario(uNome, uEmail);
+		
+		Calendar dataRecente = Calendar.getInstance();
+        Calendar dataAntiga = Calendar.getInstance();
+        dataAntiga.add(Calendar.DAY_OF_MONTH, -10);
+        
+		Leilao novo = new Leilao("Geladeira", 700.0, usuario, false);
+		novo.setDataAbertura(dataRecente);
+		Leilao antigo = new Leilao("PS5", 3500.0, usuario, true);
+		antigo.setDataAbertura(dataAntiga);
+		
+		
+		usuarioDao.salvar(usuario);
+		leilaoDao.salvar(novo);
+		leilaoDao.salvar(antigo);
+		
+		List<Leilao> listaDeAntigos = leilaoDao.antigos();
+		assertEquals(1, listaDeAntigos.size());
 	}
 }
