@@ -17,6 +17,7 @@ public class UsuarioDao {
 	}
 	
 	public Usuario porNomeEEmail(String nome, String email) {
+		// essa consulta é HQL - Hibernate Query Language
 		return (Usuario) session.createQuery("from Usuario u where u.nome = :nome and u.email = :email")
 				.setParameter("nome", nome)
 				.setParameter("email", email)
