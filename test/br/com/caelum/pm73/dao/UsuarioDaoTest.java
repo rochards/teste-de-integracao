@@ -81,4 +81,23 @@ public class UsuarioDaoTest {
 		
 		Assert.assertNull(deletado);
 	}
+	
+	@Test
+	public void deveAlterarUmUsuario() {
+		
+		Usuario usuario = new Usuario("Joseph", "jose@mail.com.br");
+		
+		usuarioDao.salvar(usuario);
+		
+		usuario.setNome("Jose");
+		usuarioDao.atualizar(usuario);
+		
+		session.flush();
+		
+		Usuario usuarioNulo = usuarioDao.porNomeEEmail("Joseph", "jose@mail.com.br");
+		Usuario usuarioAtualizado = usuarioDao.porNomeEEmail("Jose", "jose@mail.com.br");
+		
+		assertNull(usuarioNulo);
+		assertEquals(usuario.getNome(), usuarioAtualizado.getNome());
+	}
 }
