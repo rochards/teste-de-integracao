@@ -11,6 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.pm73.builder.LeilaoBuilder;
 import br.com.caelum.pm73.dominio.Leilao;
 import br.com.caelum.pm73.dominio.Usuario;
 
@@ -46,9 +47,18 @@ public class LeilaoDaoTest {
 		String uEmail = "mauricio@email.com.br";
 		Usuario usuario = new Usuario(uNome, uEmail);
 		
-		Leilao ativo = new Leilao("Geladeria", 700.0, usuario, false);
-		Leilao encerrado = new Leilao("PS5", 3500.0, usuario, false);
-		encerrado.encerra();
+		Leilao ativo = new LeilaoBuilder()
+				.comNome("Geladeira")
+				.comDono(usuario)
+				.comValor(700.0)
+				.constroi();
+		Leilao encerrado = new LeilaoBuilder()
+				.comNome("SP5")
+				.comDono(usuario)
+				.comValor(3500.0)
+				.usado()
+				.encerrado()
+				.constroi();
 		
 		usuarioDao.salvar(usuario);
 		leilaoDao.salvar(ativo);
