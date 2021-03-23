@@ -1,9 +1,12 @@
 package br.com.caelum.pm73.dao;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -14,12 +17,23 @@ public class UsuarioDaoTest {
 	/** Para criar a estrutura das tabelas, primeiro execute a classe CriaTabelas do pacote
 	 * curso. */
 	
+	private Session session;
+	private UsuarioDao usuarioDao;
+	
+	@Before
+	public void setUp() {
+		// estamos utilizando um banco de dados em memórida chamado HSQLDB
+		this.session = new CriadorDeSessao().getSession();
+		this.usuarioDao = new UsuarioDao(session);
+	}
+	
+	@After
+	public void closeSession() {
+		this.session.close();
+	}
+	
 	@Test
 	public void deveEncontrarPeloNomeEEmail() {
-		
-		// estamos utilizando um banco de dados em memórida chamado HSQLDB
-		Session session = new CriadorDeSessao().getSession();
-		UsuarioDao usuarioDao = new UsuarioDao(session);
 		
 		String uNome = "João da Silva";
 		String uEmail = "joao@email.com.br";
@@ -31,7 +45,16 @@ public class UsuarioDaoTest {
 		
 		assertEquals(uNome, usuario.getNome());
 		assertEquals(uEmail, usuario.getEmail());
+	}
+	
+	@Test
+	public void deveRetornarUsuarioNulo() {
 		
-		session.close();
+		String uNome = "João Siqueira";
+		String uEmail = "siqueira@email.com.br";
+		
+		Usuario usuario = usuarioDao.porNomeEEmail(uNome, uEmail);
+		
+		assertNull(usuario);
 	}
 }
