@@ -15,7 +15,7 @@ public class UsuarioDaoTest {
 	 * curso. */
 	
 	@Test
-	public void deveEncontrarPeloNomeEEmailMockado() {
+	public void deveEncontrarPeloNomeEEmail() {
 		
 		// estamos utilizando um banco de dados em memórida chamado HSQLDB
 		Session session = new CriadorDeSessao().getSession();
